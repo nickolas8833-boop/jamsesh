@@ -51,10 +51,8 @@ let socketInstance: Socket<ServerToClient, ClientToServer> | null = null;
 
 function getSocket() {
   if (!socketInstance) {
-    socketInstance = io(
-      const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';
-      { autoConnect: false, transports: ['websocket'] }
-    );
+    const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';
+    socketInstance = io(SERVER_URL, { autoConnect: false, transports: ['websocket'] });
   }
   return socketInstance;
 }

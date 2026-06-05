@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { AppSetup } from '../App';
 import type { Screen, InputDevice } from '../types';
 
@@ -15,6 +15,21 @@ export default function InputScreen({ go, setup, patch }: Props) {
   return (
     <div className="screen" style={{ padding:'32px 36px', gap:20 }}>
       <span className="back-link" onClick={() => go('instrument')}>← back</span>
+
+      <div style={{ maxWidth:520 }}>
+        <div style={{ fontSize:13, color:'#5a5a8a', marginBottom:6 }}>Your display name</div>
+        <input
+          value={setup.name}
+          onChange={e => patch({ name: e.target.value })}
+          placeholder="e.g. Nicko"
+          style={{
+            width:'100%', background:'#1e1e3a', border:'2px solid #2a2a50',
+            borderRadius:10, padding:'10px 14px', color:'#fff', fontSize:14,
+            outline:'none', boxSizing:'border-box'
+          }}
+        />
+      </div>
+
       <div>
         <div style={{ fontSize:20, fontWeight:600, marginBottom:5 }}>How is your instrument connected?</div>
         <div style={{ color:'#5a5a8a', fontSize:12 }}>Helps JamSesh pick up your audio correctly.</div>
@@ -44,7 +59,12 @@ export default function InputScreen({ go, setup, patch }: Props) {
         </div>
       </div>
 
-      <button className="btn-primary" onClick={() => go('lobby')} style={{ padding:14, fontSize:15, maxWidth:520, marginTop:'auto' }}>
+      <button
+        className="btn-primary"
+        onClick={() => go('lobby')}
+        disabled={!setup.name.trim()}
+        style={{ padding:14, fontSize:15, maxWidth:520, marginTop:'auto', opacity: setup.name.trim() ? 1 : 0.4, cursor: setup.name.trim() ? 'pointer' : 'not-allowed' }}
+      >
         Enter lobby →
       </button>
     </div>
