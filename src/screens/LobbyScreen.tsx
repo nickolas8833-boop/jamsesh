@@ -21,6 +21,37 @@ export default function LobbyScreen({ go, setup }: Props) {
     onPlayerLeft: (id: string) => setPlayers(prev => prev.filter(p => p.id !== id)),
   });
 
+  useEffect(() => {
+    if (!room) return;
+    const player: PlayerInfo = {
+      id:         '',
+      name:       setup.name || 'Anonymous',
+      instrument: setup.instrument,
+      subtype:    setup.subtype,
+      role:       setup.role,
+      latencyMs:  0,
+    };
+
+    // Wait for socket to finish connecting before emitting
+    const timer = setTimeout(() => {
+      if (setup.mode === 'private' && setup.role === 'md') {
+        createRoom({
+          code:        room.code,
+          name:        room.name,
+          maxSize:     room.maxSize,
+          sessionType: room.sessionType,
+          defaultKey:  room.defaultKey,
+          notes:       room.notes,
+          player,
+        });
+      } else {
+        joinRoom(room.code, player);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   function copy() {
     navigator.clipboard?.writeText(code).catch(() => {});
   }
