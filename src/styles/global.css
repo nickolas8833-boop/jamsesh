@@ -1,0 +1,245 @@
+/* ─── Reset ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: #0c0c1e;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #EEEDFE;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a50; border-radius: 4px; }
+
+/* ─── Animations ──────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+@keyframes blink {
+  0%, 100% { background: #E24B4A; }
+  50%       { background: #791F1F; }
+}
+
+.fade-up { animation: fadeUp 0.25s ease forwards; }
+
+/* ─── App shell ───────────────────────────────────────── */
+.app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #0c0c1e;
+}
+
+/* ─── Screens ─────────────────────────────────────────── */
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ─── Buttons ─────────────────────────────────────────── */
+.btn-primary {
+  background: #533AB7;
+  border: none;
+  border-radius: 12px;
+  color: #EEEDFE;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.btn-primary:hover { background: #3C3489; }
+
+.btn-ghost {
+  background: #1e1e3a;
+  border: 1.5px solid #2a2a50;
+  border-radius: 12px;
+  color: #EEEDFE;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.btn-ghost:hover { background: #2a2a50; }
+
+/* ─── Chip ────────────────────────────────────────────── */
+.chip {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #2a2a50;
+  color: #7070aa;
+  background: #1e1e3a;
+  transition: all 0.12s;
+  user-select: none;
+  white-space: nowrap;
+}
+.chip.on, .chip.active { background: #533AB7; border-color: #7F77DD; color: #EEEDFE; }
+.chip:hover:not(.on):not(.active) { background: #2a2a50; color: #EEEDFE; }
+
+/* ─── Toggle ──────────────────────────────────────────── */
+.toggle {
+  width: 40px; height: 22px;
+  background: #1e1e3a;
+  border-radius: 11px;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #2a2a50;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.toggle.on { background: #533AB7; border-color: #7F77DD; }
+.toggle-thumb {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 14px; height: 14px;
+  background: #5a5a8a;
+  border-radius: 50%;
+  transition: left 0.2s, background 0.2s;
+}
+.toggle.on .toggle-thumb { left: 21px; background: #EEEDFE; }
+
+/* ─── Instrument Avatar ───────────────────────────────── */
+.av {
+  background: #13132a;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.av:hover, .av.sel { border-color: #7F77DD; background: #1e1e3a; }
+
+/* ─── Number button ───────────────────────────────────── */
+.nb {
+  background: #1e1e3a;
+  border: 1px solid #2a2a50;
+  border-radius: 8px;
+  padding: 10px 0;
+  text-align: center;
+  color: #EEEDFE;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.nb:hover { background: #2a2a50; }
+.nb.lit { background: #533AB7; border-color: #7F77DD; }
+
+/* ─── Toolbar labeled tab ─────────────────────────────── */
+.tbtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  background: #13132a;
+  border: 1px solid #1e1e3a;
+  color: #7070aa;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  white-space: nowrap;
+  user-select: none;
+}
+.tbtn:hover { background: #1e1e3a; color: #EEEDFE; }
+.tbtn.active { background: #1e1e3a; border-color: #533AB7; color: #EEEDFE; }
+
+/* ─── Song row ────────────────────────────────────────── */
+.srow {
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.1s;
+}
+.srow:hover { background: #1e1e3a; }
+.srow.now {
+  background: #1e1e3a;
+  border-left: 2px solid #7F77DD;
+  padding-left: 8px;
+  border-radius: 0 8px 8px 0;
+}
+
+/* ─── Chart line ──────────────────────────────────────── */
+.chart-line {
+  padding: 6px 0;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  border-bottom: 0.5px solid #1a1a2e;
+}
+.chart-num   { width: 32px; text-align: center; color: #7F77DD; font-size: 15px; font-weight: 500; flex-shrink: 0; }
+.chart-chord { width: 54px; color: #1D9E75; font-size: 12px; flex-shrink: 0; }
+.chart-lyric { color: #EEEDFE; font-size: 13px; line-height: 1.6; }
+
+/* ─── Input ───────────────────────────────────────────── */
+.input-field {
+  width: 100%;
+  background: #13132a;
+  border: 1px solid #2a2a50;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #EEEDFE;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.input-field:focus { border-color: #533AB7; }
+
+/* ─── Section label ───────────────────────────────────── */
+.section-label {
+  color: #7070aa;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 14px 0 6px;
+}
+.section-label:first-child { margin-top: 0; }
+
+/* ─── Volume bar ──────────────────────────────────────── */
+.vol-track {
+  background: #0c0c1e;
+  border-radius: 3px;
+  height: 3px;
+  margin-top: 6px;
+  width: 80px;
+}
+.vol-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.18s ease;
+}
+
+/* ─── Back link ───────────────────────────────────────── */
+.back-link {
+  color: #5a5a8a;
+  cursor: pointer;
+  font-size: 13px;
+  user-select: none;
+}
+.back-link:hover { color: #EEEDFE; }
+
+/* ─── Divider ─────────────────────────────────────────── */
+.divider { height: 1px; background: #13132a; }
+.divider-v { width: 1px; background: #1e1e3a; margin: 0 4px; }
