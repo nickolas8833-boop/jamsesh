@@ -1,0 +1,6 @@
+# Tells Railway exactly how to build and run this Node service
+[phases.install]
+cmds = ["npm install"]
+
+[start]
+cmd = "npm start"
