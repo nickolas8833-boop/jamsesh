@@ -16,6 +16,7 @@ import ChartViewScreen     from './screens/ChartViewScreen';
 export interface AppSetup {
   mode: 'private' | 'solo' | null;
   role: UserRole;
+  name: string;
   instrument: Instrument;
   subtype: string;
   inputDevice: InputDevice;
@@ -27,6 +28,7 @@ export interface AppSetup {
 const DEFAULT_SETUP: AppSetup = {
   mode: null,
   role: 'md',
+  name: '',
   instrument: 'keys',
   subtype: 'Grand piano',
   inputDevice: 'usb',
