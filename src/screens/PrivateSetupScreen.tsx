@@ -11,16 +11,53 @@ interface Props {
 
 const KEYS = ['A','Bb','B','C','C#','D','Eb','E','F','F#','G','Ab'];
 
-export default function PrivateSetupScreen({ go, onSubmit }: Props) {
+export default function PrivateSetupScreen({ go, patch, onSubmit }: Props) {
   const [name, setName]       = useState('Sunday Worship Band');
   const [maxSize, setMaxSize] = useState('4');
   const [type, setType]       = useState<Room['sessionType']>('worship');
   const [key, setKey]         = useState('A');
   const [notes, setNotes]     = useState('');
   const [joinCode, setJoinCode] = useState('');
+  const [joinError, setJoinError] = useState('');
 
   function handleCreate() {
     onSubmit({ name, maxSize: parseInt(maxSize), sessionType: type, defaultKey: key, notes });
+  }
+
+  async function handleJoin() {
+    const code = joinCode.replace('·', '').replace('JAM', '').trim() || joinCode.trim();
+    const fullCode = code.toUpperCase();
+    if (!fullCode || fullCode.length < 4) {
+      setJoinError('Enter a valid room code.');
+      return;
+    }
+    setJoinError('');
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/room/${fullCode}`);
+      if (!res.ok) { setJoinError('Room not found. Check the code.'); return; }
+      const roomData = await res.json();
+
+      // Set up room in app state so lobby knows we're joining
+      patch({
+        mode: 'private',
+        role: 'player',
+        room: {
+          code:          roomData.code,
+          name:          roomData.name,
+          maxSize:       roomData.maxSize,
+          sessionType:   roomData.sessionType,
+          defaultKey:    roomData.defaultKey,
+          notes:         '',
+          currentSongId: null,
+          currentNumber: null,
+          players:       [],
+        },
+      });
+      go('role');
+    } catch {
+      setJoinError('Could not reach server. Try again.');
+    }
   }
 
   return (
@@ -91,11 +128,12 @@ export default function PrivateSetupScreen({ go, onSubmit }: Props) {
               onChange={e => setJoinCode(e.target.value.toUpperCase())}
               placeholder="JAM·XXXX"
               style={{ letterSpacing:3, textTransform:'uppercase' }}/>
-            <button className="btn-primary" onClick={() => go('role')}
+            <button className="btn-primary" onClick={handleJoin}
               style={{ padding:'10px 18px', fontSize:13, whiteSpace:'nowrap' }}>
               Join
             </button>
           </div>
+          {joinError && <div style={{ color:'#D4537E', fontSize:12 }}>{joinError}</div>}
         </div>
         <div style={{ color:'#3a3a6a', fontSize:11, textAlign:'center', marginTop:'auto' }}>
           Room codes expire after 24 hours of inactivity.
