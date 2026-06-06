@@ -25,8 +25,7 @@ export default function PrivateSetupScreen({ go, patch, onSubmit }: Props) {
   }
 
   async function handleJoin() {
-    const code = joinCode.replace('·', '').replace('JAM', '').trim() || joinCode.trim();
-    const fullCode = code.toUpperCase();
+    const fullCode = joinCode.replace(/^JAM[·\-]?/i, '').trim().toUpperCase();
     if (!fullCode || fullCode.length < 4) {
       setJoinError('Enter a valid room code.');
       return;
@@ -38,7 +37,6 @@ export default function PrivateSetupScreen({ go, patch, onSubmit }: Props) {
       if (!res.ok) { setJoinError('Room not found. Check the code.'); return; }
       const roomData = await res.json();
 
-      // Set up room in app state so lobby knows we're joining
       patch({
         mode: 'private',
         role: 'player',
